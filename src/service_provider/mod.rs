@@ -206,11 +206,13 @@ impl ServiceProvider {
             protocol_support_enumeration: Some("urn:oasis:names:tc:SAML:2.0:protocol".to_string()),
             key_descriptors: Some(key_descriptors),
             valid_until,
-            single_logout_services: Some(vec![Endpoint {
-                binding: HTTP_POST_BINDING.to_string(),
-                location: self.slo_url.clone().ok_or(Error::MissingSloUrl)?,
-                response_location: self.slo_url.clone(),
-            }]),
+            single_logout_services: self.slo_url.clone().map(|slo_url| {
+                vec![Endpoint {
+                    binding: HTTP_POST_BINDING.to_string(),
+                    location: slo_url.clone(),
+                    response_location: Some(slo_url),
+                }]
+            }),
             authn_requests_signed: Some(false),
             want_assertions_signed: Some(true),
             assertion_consumer_services: vec![IndexedEndpoint {
