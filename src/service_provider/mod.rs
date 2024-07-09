@@ -1,5 +1,5 @@
 use crate::crypto;
-use crate::metadata::{Endpoint, IndexedEndpoint, KeyDescriptor, NameIdFormat, SpSsoDescriptor};
+use crate::metadata::{AttributeConsumingService, Endpoint, IndexedEndpoint, KeyDescriptor, LocalizedName, NameIdFormat, SpSsoDescriptor};
 use crate::schema::{Assertion, Response};
 use crate::traits::ToXml;
 use crate::{
@@ -178,7 +178,7 @@ impl ServiceProvider {
                 },
             });
             key_descriptors.push(KeyDescriptor {
-                key_use: Some("signing".to_string()),
+                key_use: Some("encryption".to_string()),
                 key_info: KeyInfo {
                     id: None,
                     x509_data: Some(X509Data {
@@ -220,7 +220,6 @@ impl ServiceProvider {
                 location: self.acs_url.clone().ok_or(Error::MissingAcsUrl)?,
                 ..IndexedEndpoint::default()
             }],
-
             ..SpSsoDescriptor::default()
         };
 
